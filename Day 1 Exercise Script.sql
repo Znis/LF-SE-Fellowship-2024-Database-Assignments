@@ -65,7 +65,7 @@ from
 where
     category = 'Electronics';
 
--- Read products that are in Electronics category from Products table
+-- Read Customer name from Orders table who ordered in following date range
 select
     customer_name
 from
