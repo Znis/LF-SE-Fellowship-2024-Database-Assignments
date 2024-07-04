@@ -75,7 +75,6 @@ VALUES
     (10, 2, 104, '2023-03-05');
 
 -- Questions and Solution
-
 -- Join
 --  Retrieve the list of students and their enrolled courses (Inner Join)
 select
@@ -86,7 +85,6 @@ from
     join enrollments e on s.student_id = e.student_id
     join courses c on e.course_id = c.course_id;
 
-
 -- List all students and their enrolled courses, including those who haven't enrolled in any course (Left Join)
 select
     s.*,
@@ -96,7 +94,6 @@ from
     left join enrollments e ON s.student_id = e.student_id
     left join courses c ON e.course_id = c.course_id;
 
-
 -- Display all courses and the students enrolled in each course, including courses with no enrolled students (Right Join)
 select
     c.course_name,
@@ -105,7 +102,6 @@ from
     students s
     right join enrollments e ON s.student_id = e.student_id
     right join courses c ON e.course_id = c.course_id;
-
 
 -- Find pairs of students who are enrolled in at least one common course (Self Join)
 select distinct
@@ -131,19 +127,24 @@ from
     enrollments e
     join enrollments e2 on e.student_id <> e2.student_id;
 
-
 -- Retrieve students who are enrolled in 'Introduction to CS' but not in 'Data Structures' (Complex Join)
 select
     s.student_name
 from
     students s
-    join enrollments e ON s.student_id = e.student_id
-    join courses c on c.course_id = e.course_id
+    join enrollments e on s.student_id = e.student_id
+    join courses c on e.course_id = c.course_id
+    and c.course_name = 'Introduction to CS'
 where
-    c.course_name = 'Introduction to CS'
-    and c.course_name <> 'Data Structures';
-
-
+    s.student_id not in (
+        select
+            s2.student_id
+        from
+            students s2
+            join enrollments e2 ON s.student_id = e2.student_id
+            join courses c2 ON e2.course_id = c2.course_id
+            and c2.course_name = 'Data Structures'
+    );
 
 -- Window Function
 -- List all students along with a row number based on their enrollment date in ascending order (ROW_NUMBER())
@@ -163,7 +164,6 @@ select
 from
     enrollments e;
 
-
 -- Rank students based on the number of courses they are enrolled in, handling ties by assigning the same rank (RANK())
 select
     student_name,
@@ -182,7 +182,6 @@ from
         group by
             s.student_name
     ) as studentCourseCount;
-
 
 -- Determine the dense rank of courses based on their enrollment count across all students (DENSE_RANK())
 select
