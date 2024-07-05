@@ -122,12 +122,12 @@ update employees
 set
 	salary = new_salary
 where
-	first_name = first_name
-	and last_name = last_name;
+	first_name = f_name
+	and last_name = l_name;
 
 commit;
 
-end;
+end;$$;
 
 select first_name, last_name, salary from employees 
 where first_name = 'TOMASA' and  last_name = 'ARMEN'; -- before calling update_salary procedure
